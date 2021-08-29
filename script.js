@@ -4,18 +4,22 @@ const rate = document.querySelector('.label-rate-container');
 
 function createRate() {
   for (let index = 1; index < 11; index += 1) {
+    const div = document.createElement('div');
     const radioBtn = document.createElement('input');
     const label = document.createElement('label');
     label.setAttribute('for', index);
     label.innerHTML = `${index} `;
     label.classList.add('form-check-label');
+    div.classList.add('rate-container')
     radioBtn.setAttribute('type', 'radio');
+    radioBtn.setAttribute('data-validate-field', 'radio');
     radioBtn.id = index;
-    radioBtn.classList.add('form-check-input');
+    radioBtn.classList.add('form-check-input', 'rate', 'form__radio');
     radioBtn.setAttribute('name', 'rate');
     radioBtn.setAttribute('value', index);
-    rate.appendChild(label);
-    rate.appendChild(radioBtn);
+    rate.appendChild(div);
+    div.appendChild(radioBtn);
+    div.appendChild(label);
   }
 }
 
@@ -51,12 +55,15 @@ agreement.addEventListener('click', activeBtn);
 const loginBtn = document.querySelector('.login-btn');
 const login = document.querySelector('#login');
 const pass = document.querySelector('#password');
+const emailValid = /\w{5,15}/;
+const passValid = /\w{8,20}/;
 
 loginBtn.addEventListener('click', () => {
-  if (login.value.length < 7 || pass.value.length < 5) {
-    alert('Login ou senha inválidos.');
-  } else {
+  console.log(emailValid.test(login.value), passValid.test(pass.value));
+  if (emailValid.test(login.value) && passValid.test(pass.value)) {
     window.alert('Olá, Tryber!');
+  } else {
+    window.alert('Login ou senha inválidos.');
   }
 });
 
@@ -75,17 +82,13 @@ textarea.addEventListener('keyup', counter);
 
 // formulario submit
 
-submitBtn.addEventListener('click', (event) => {
-  event.preventDefault();
-});
-
 const getName = document.querySelector('#input-name');
 const getLastName = document.querySelector('#input-lastname');
 const getEmail = document.querySelector('#input-email');
 const getHouse = document.querySelector('#house');
 const getFamily = document.querySelectorAll('.family');
 const getSubject = document.querySelectorAll('.subject');
-const getRateRadio = document.querySelectorAll('.form-check-input');
+const getRateRadio = document.querySelectorAll('.rate');
 const form = document.querySelector('.form');
 
 function getFamilySelected() {
@@ -105,6 +108,7 @@ function getRateSelected() {
       rateCheck = getRateRadio[index].value;
     }
   }
+  console.log(rateCheck);
   return rateCheck;
 }
 
@@ -112,10 +116,10 @@ function getSubjectSelected() {
   let subjectSelected = [];
   for (let index = 0; index < getSubject.length; index += 1) {
     if (getSubject[index].checked) {
-      subjectSelected.push(`${getSubject[index].value}, `);
+      subjectSelected.push(getSubject[index].value);
     }
   }
-  subjectSelected = subjectSelected.join(' ');
+  subjectSelected = subjectSelected.join(', ');
   console.log(subjectSelected);
   return subjectSelected;
 }
@@ -127,22 +131,100 @@ function align() {
   form.style.alignItems = 'center';
 }
 
-submitBtn.addEventListener('click', () => {
-  form.innerHTML = '';
-  const fullName = `Nome: ${getName.value} ${getLastName.value}`;
-  const email = `Email: ${getEmail.value}`;
-  const house = `Casa: ${getHouse.value}`;
-  const family = `Família: ${getFamilySelected()}`;
-  const subject = `Matérias: ${getSubjectSelected()}`;
-  const evaluation = `Avaliação: ${getRateSelected()}`;
-  const comment = `Observações: ${textarea.value}`;
-  const infos = [fullName, email, house, family, subject, evaluation, comment];
+// display infos
 
-  for (let index = 0; index < infos.length; index += 1) {
-    const paragraph = document.createElement('p');
-    paragraph.classList.add('infos-p');
-    paragraph.innerHTML = infos[index];
-    form.appendChild(paragraph);
+const submitForm = () => {
+    const subjects = getSubjectSelected();
+    console.log(subjects);
+    if (subjects.length < 1) {
+      return;
+    }
+    form.innerHTML = '';
+    const fullName = `Nome: ${getName.value} ${getLastName.value}`;
+    const email = `Email: ${getEmail.value}`;
+    const house = `Casa: ${getHouse.value}`;
+    const family = `Família: ${getFamilySelected()}`;
+    const subject = `Matérias: ${getSubjectSelected()}`;
+    const evaluation = `Avaliação: ${getRateSelected()}`;
+    const comment = `Observações: ${textarea.value}`;
+    const infos = [fullName, email, house, family, subject, evaluation, comment];
+    for (let index = 0; index < infos.length; index += 1) {
+      const paragraph = document.createElement('p');
+      paragraph.classList.add('infos-p');
+      paragraph.innerHTML = infos[index];
+      form.appendChild(paragraph);
+    }
+    align();
+};
+
+// form check
+
+new window.JustValidate('.js-form', {
+  rules: {
+    firstname: {
+      required: true,
+      minLength: 3,
+      maxLength: 15,
+    },
+    lastname: {
+      required: true,
+      minLength: 3,
+      maxLength: 15,
+    },
+    email: {
+      required: true,
+      email: true,
+    },
+    radio: {
+      required: true,
+    },
+    radio1: {
+      required: true,
+    },
+    text: {
+      required: true,
+    },
+  },
+
+  submitHandler: function (form, values, ajax) {
+    ajax({
+        url: 'https://just-validate-api.herokuapp.com/submit',
+        method: 'POST',
+        data: values,
+        async: true,
+        callback: function (response) {
+            submitForm();
+        },
+        error: function (response) {
+            alert('Insira todos os dados corretamente.')
+        }
+    });
+},
+});
+
+// login on mobile 
+
+const loginIcon = document.querySelector('.login-icon');
+const loginField = document.querySelector('.login-field');
+const logo = document.querySelector('.logo');
+let active = false;
+
+loginIcon.addEventListener('click', () => {
+  if (!active) {
+    active = true
+    loginField.classList.add('active');
+    loginIcon.classList.add('active');
+    logo.classList.add('active');
+  } else {
+    active = false
+    loginField.classList.remove('active');
+    loginIcon.classList.remove('active');
+    logo.classList.remove('active');
   }
-  align();
+});
+
+// reload window
+
+logo.addEventListener('click', () => {
+  location.reload();
 });

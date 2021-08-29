@@ -16,10 +16,14 @@ body {
 
 .header {
   display: flex;
-  background-color: rgb(50, 167, 145);
+  background-color: rgba(0, 0, 0, 0);
   justify-content: space-between;
   width: 100%;
-  padding: 0 20px;
+  padding: 10px 50px;
+}
+
+.login-icon {
+  display: none;
 }
 
 .inner-header {
@@ -37,11 +41,16 @@ body {
 
 .login-input {
   font-size: 0.9em;
-  width: 150px;
+  width: 39%;
   border: none;
   padding-left: 5px;
   border-radius: 2px;
   transition: 0.2s;
+  background-color: rgba(250, 250, 250, 0.459);
+}
+
+.login-input::placeholder {
+  color: rgba(0, 0, 0, 0.685);
 }
 
 .login-input:focus {
@@ -71,7 +80,9 @@ body {
   font-family: MedievalSharp, cursive;
   align-self: center;
   color: rgb(243, 243, 243);
-  font-size: 2.5rem;
+  font-size: 2.8rem;
+  position: absolute;
+  margin-top: 20px;
 }
 
 .login-field {
@@ -95,12 +106,14 @@ main {
 
 .form-input {
   font-size: 0.9em;
+  width: 50%;
   border: none;
   padding: 5px;
   border-radius: 2px;
   margin: 5px;
   transition: 0.2s;
-  background-color: rgba(255, 255, 255, 0.185);
+  background-color: rgba(87, 87, 87, 0.185);
+  color: rgb(241, 241, 241);
 }
 
 .form-input::placeholder {
@@ -109,11 +122,8 @@ main {
 
 .form-input:focus {
   outline: none;
-  background-color: rgba(245, 245, 245, 0.815);
-}
-
-.form-input:focus::placeholder {
-  color: rgb(77, 77, 77);
+  background-color: rgba(73, 73, 73, 0.637);
+  color: white;
 }
 
 .name {
@@ -125,19 +135,21 @@ main {
 }
 
 .email-house select {
-  width: 262px;
+  width: 50%;
   color: rgb(197, 197, 197);
-  background-color: rgb(255, 255, 255, 0.185);
+  background-color: rgba(87, 87, 87, 0.185);
 }
 
 .email-house select:focus {
-  color: rgb(37, 37, 37);
+  color: rgb(255, 255, 255);
 }
 
 .main-logo {
   height: 500px;
-  filter: brightness(80%);
+  opacity: 0.4;
   align-self: center;
+  /* background-color: rgba(255, 255, 255, 0.096); */
+  border-radius: 4px;
 }
 
 .family-container {
@@ -168,25 +180,29 @@ main {
 .label-rate-container {
   display: flex;
   margin-bottom: 15px;
+  justify-content: space-around;
 }
 
 .textarea-txt {
+  color: rgb(241, 241, 241);
   resize: none;
   border: none;
   padding: 10px;
   border-radius: 2px;
   margin: 5px;
   transition: 0.2s;
-  background-color: rgba(255, 255, 255, 0.185);
+  background-color: rgba(87, 87, 87, 0.185);
 }
 
 .textarea-txt:focus {
   outline: none;
-  background-color: rgba(241, 241, 241, 0.637);
+  background-color: rgba(73, 73, 73, 0.637);
+  color: white;
 }
 
 .counter {
   text-align: right;
+  padding-right: 15px;
 }
 
 #label-infos {
@@ -214,15 +230,162 @@ main {
   background-color: rgb(79, 24, 131);
 }
 
-.dados {
-  display: none;
-}
-
 footer {
+  height: 2em;
   font-size: 0.9em;
   align-self: center;
 }
 
 .hide {
   display: none;
+}
+
+.infos-p {
+  margin-bottom: 0;
+}
+
+@media screen and (max-width: 1190px) {
+  body {
+    font-size: 1em;
+    background-image: url('./images/bg-mobile.jpg');
+  }
+
+  .logo {
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    top: .8em;
+    left: 1em;
+  }
+
+  .header {
+    height: auto;
+  }
+
+  .trybewarts-header-logo {
+    width: 30px;
+    z-index: 2;
+  }
+
+  main {
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem 0;
+  }
+
+  .login-icon {
+    display: block;
+    font-size: 1.8rem;
+    opacity: .8;
+    position: absolute;
+    right: 1rem;
+    top: 6px;
+    cursor: pointer;
+    transition: .5s;
+    z-index: 2;
+    color: rgb(212, 212, 212);
+  }
+
+  .login-icon.active {
+    opacity: 1;
+  }
+
+  .login-field {
+    width: 100%;
+    max-width: 100%;
+    position: absolute;
+    flex-direction: column;
+    top: 0vh;
+    left: 0;
+    background-color: rgb(26, 26, 26);
+    z-index: 1;
+    align-items: center;
+    justify-content: flex-end;
+    height: 0px;
+    overflow: hidden;
+    transition: ease-out height .5s;
+  }
+
+  .login-field.active {
+    height: 240px;
+  }
+
+  .login-input {
+    width: 80%;
+    margin: 1.3em;
+    padding: 5px;
+    background-color: rgb(212, 212, 212);
+  }
+
+  .login-input:nth-child(1) {
+    margin-top: 200px;
+  }
+
+  .login-btn {
+    margin-bottom: 1.5em;
+    margin-top: .4em;
+  }
+
+  .main-logo {
+    display: none;
+  }
+
+  .form {
+    width: 90%;
+    padding: 10px;
+  }
+
+  .title {
+    display: flex;
+    position: relative;
+    align-self: center;
+    margin: 30px 0;
+  }
+
+  .name {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .email-house, .email-house select {
+    flex-direction: column;
+    width:  100%;
+  }
+
+  .form-input {
+    width: 100%;
+    margin: 5px 0;
+  }
+
+  .family-options {
+    display: flex;
+    justify-content: space-around;
+    margin-left: 0;
+  }
+
+  .tech {
+    margin-top: 20px;
+  }
+
+  .subject-list {
+    height: 60px;
+    flex-wrap: wrap;
+    width: 70%;
+    margin: 5px auto 15px auto;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .rate-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .infos-p {
+    width: 80%;
+    text-align: center;
+    margin: 10px 0;
+    padding: 10px 0;
+  }
 }
